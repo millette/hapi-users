@@ -42,7 +42,7 @@
         "register": "./plugins/login",
         "options": {
           "auth": {
-            "mode": "optional"
+            "mode": "try"
           }
         }
       }
