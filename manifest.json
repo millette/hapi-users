@@ -41,6 +41,10 @@
       "plugin": {
         "register": "./plugins/login",
         "options": {
+          "strategy": {
+            "password": "cookie_encryption_password_secure",
+            "isSecure": false
+          },
           "auth": {
             "mode": "try"
           }
