@@ -13,6 +13,4 @@ exports.register = (server, options, next) => {
   next()
 }
 
-exports.register.attributes = {
-  pkg: require('./package.json')
-}
+exports.register.attributes = require('./package.json')

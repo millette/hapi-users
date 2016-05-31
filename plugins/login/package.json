@@ -1,5 +1,5 @@
 {
   "name": "login",
   "version": "0.0.0",
-  "dependencies": ["hapi-auth-cookie"]
+  "dependencies": "hapi-auth-cookie"
 }
