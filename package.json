@@ -2,7 +2,6 @@
   "name": "hapi-users",
   "version": "0.0.0",
   "description": "hapi thingy",
-  "main": "server.js",
   "scripts": {
     "lint": "standard",
     "start": "standard && rejoice -c manifest.json -p $(pwd)",
