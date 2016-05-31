@@ -5,6 +5,11 @@
 ## Fichier par fichier
 
 ### package.json
+Fichier standard des modules npm pour node.
+Déclare les dépendances, les scripts, etc.
+
+Voici les extraits importants:
+
 ```js
 "scripts": {
   "lint": "standard",
@@ -70,16 +75,128 @@ Sert à interpréter les *templates* des *views*.
 #### visionary
 Gestionnaire de vision, pour usage avec rejoice/glue.
 
+#### pug
+Anciennement Jade, pug est l'engin de template qu'on va utiliser avec vision.
+
 #### hapi-auth-cookie
+Gestionnaire du cookie d'authentification.
 
 #### good
 Avec good-console et good-squeeze, *log* les accès au serveur web.
 
 ### manifest.json
+Fichier standard pour hapi. Rejoice lit un fichier manifest.json
+avec glue et démarre le serveur web tel que spécifié. Tous les détails
+se trouvent dans le document [Glue API][] (en anglais).
 
-### lib/models.js
+On utilise deux sections, connections et registrations.
+
+On déclare un seul serveur web, répondant au port 3030:
+
+```js
+"connections": [{ "port": 3030 }]
+```
+
+La plus grosse partie du fichier manifest est constituée de plugins
+sous formes d'objets ({} dans l'exemple) dans le tableau registrations:
+
+```js
+"registrations": [ {}, {} ]
+```
+
+Voici la liste de chacun des plugins.
+
+#### vision
+```js
+{ "plugin": "vision" }
+```
+
+Au plus simple, un plugin déclare un nom de module. Ici, vision,
+qu'on avait pris soin d'ajouter aux dépendances dans package.json.
+
+On aurait pu aussi écrire dans une forme plus longue:
+
+```js
+{
+  "plugin": {
+    "register": "vision"
+  }
+}
+```
+
+On verra ce format avec les autres plugins.
+
+#### visionary
+```js
+{
+  "plugin": {
+    "register": "visionary",
+    "options": {
+      "engines": { "pug": "pug" },
+      "path": "views",
+      "isCached": false
+    }
+  }
+}
+```
+
+Avec rejoice/glue, il faut le gestionnaire visionary pour passer
+les options à vision. C'est ici qu'on déclare l'engin de templates,
+pug avec l'extension de fichiers .pug et où trouver les templates,
+dans le répertoire views.
+
+Par défaut, isCached est true et les templates ne sont lu qu'une seule
+fois à partir du disque. Pour le développement, c'est plus pratique de
+désactiver ce cache puisque ça permet l'édition des templates et leur
+rafraichissement au niveau du serveur web sans devoir redémarrer ce dernier.
+
+#### hapi-auth-cookie
+```js
+{ "plugin": "hapi-auth-cookie" }
+```
+
+Gestion du cookie de session. On verra son usage dans plugins/login/index.js
+un peu plus loin.
+
+#### plugins/login
+```js
+{
+  "plugin": {
+    "register": "./plugins/login",
+    "options": {
+      "auth": {
+        "mode": "try"
+      }
+    }
+  }
+}
+```
+
+Tel que déclaré dans plugins/login/package.json ce plugin dépend de hapi-auth-cookie.
+
+On notera que le chemin du plugin (register) commence par ./
+pour indiquer qu'il s'agit d'un plugin local et non d'un module npm.
+
+L'option auth.mode est optionnelle et déclare le mode par défaut d'authentification.
+Avec "try" ou "optional", le cookie est vérifié à chaque route.
+Sans cette vérification, l'information du cookie n'est pas disponible à la route.
+Enfin avec "required", l'authentification doit être validée avant d'avoir accès
+à la route. Sans authentification, le serveur web retourne un 401.
+
+On verra plus tard comment configurer auth route par route, au besoin.
+
+#### routes/home
+```js
+{ "plugin": "./routes/home" }
+```
+
+Enfin, on déclare des routes, ici avec un plugin local.
+
+### routes/home.js
 
 ### lib/utils.js
+
+### lib/models.js
 
 ### models/users.js
 
@@ -87,9 +204,8 @@ Avec good-console et good-squeeze, *log* les accès au serveur web.
 
 ### plugins/login/package.json
 
-### routes/home.js
-
 ### views/user.pug
 
 
 [StandardJS]: <http://standardjs.com/>
+[Glue API]: <https://github.com/hapijs/glue/blob/master/API.md>
