@@ -193,19 +193,116 @@ On verra plus tard comment configurer auth route par route, au besoin.
 Enfin, on déclare des routes, ici avec un plugin local.
 
 ### routes/home.js
+Plugin qui déclare nos routes. Il faut nommer le plugin, lui donner
+une version, énumérer ses dépendances (hapi-auth-cookie ici) et enfin
+lui passer un tableau d'objets routes:
+
+```js
+[
+  {
+    method: 'GET',
+    path: '/',
+    handler: function (request, reply) {
+      reply.view('user', request.auth)
+    }
+  },
+  {
+    method: 'GET',
+    path: '/login',
+    handler: function (request, reply) {
+      request.cookieAuth.set({ bam: 'paff' })
+      reply.redirect('/')
+    }
+  },
+  {
+    method: 'GET',
+    path: '/logout',
+    handler: function (request, reply) {
+      request.cookieAuth.clear()
+      reply.redirect('/')
+    }
+  }
+]
+```
+
+Ceci déclare trois chemins qui répondent à la méthode http get:
+
+* <http://localhost:3030/>
+* <http://localhost:3030/login>
+* <http://localhost:3030/logout>
+
+#### GET /
+La méthode ```reply.view()``` vient du plugin vision et retourne le
+template en premier argument ('user') avec le contexte (les valeurs)
+du second argument (request.auth). Pour nos premiers tests, on se
+contente d'afficher l'information d'authentification.
+
+#### GET /login
+Au login, on set le cookie d'authentification. Comme pour tous les cookies,
+on doit absolument rediriger (charger une autre page) pour qu'il prenne effet.
+
+#### GET /logout
+Au logout, on clear le cookie d'authentification. Comme pour tous les cookies,
+on doit absolument rediriger (charger une autre page) pour qu'il prenne effet.
 
 ### lib/utils.js
+Le fichier utils.js déclare quelques fonctions.
+
+```js
+exports.routePlugin = function (attributes, routes) {
+  // ...
+}
+```
+
+La fonction routePlugin est utilisée dans ./routes/home.js et permet
+de facilement créer des plugins pour les routes.
+
+Événtuellement, il faudra explorer [hapi-routify][].
 
 ### lib/models.js
+*À venir*
 
 ### models/users.js
+*À venir*
 
 ### plugins/login/index.js
+Définit notre stratégie d'authentification. Le mode défini dans
+manifest.json est passée à ce plugin, ainsi que quelques autres
+options pour configurer la stratégie.
 
 ### plugins/login/package.json
+Déclare les dépendances du plugin (du même répertoire)
+ainsi que son nom et sa version.
 
 ### views/user.pug
+Les views sont des templates. Dans notre configuration,
+les templates sont interprétés par [pug][] (anciennement jade).
+**Notez que l'indentation est importante dans un fichier pug.**
+
+Dans ./routes/home.js on passe request.auth au view, ce qui nous donne
+accès à plusieurs variables dans le template.
+
+Pour déterminer si l'utilisateur est connecté:
+
+```
+if isAuthenticated
+  p: a(href='/logout') Logout
+else
+  p: a(href='/login') Login
+```
+
+On affichera un lien login ou logout, selon l'état actuel.
+
+On peut aussi tester une variable et afficher son contenu:
+
+```
+if credentials
+  h3 credentials
+  pre= JSON.stringify(credentials, null, ' ')
+```
 
 
 [StandardJS]: <http://standardjs.com/>
 [Glue API]: <https://github.com/hapijs/glue/blob/master/API.md>
+[hapi-routify]: <https://github.com/g-div/hapi-routify>
+[pug]: <http://jade-lang.com/>
