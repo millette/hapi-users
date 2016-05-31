@@ -13,7 +13,7 @@ Voici les extraits importants:
 ```js
 "scripts": {
   "lint": "standard",
-  "start": "standard && rejoice -c manifest.json -p $(pwd)",
+  "start": "standard && rejoice -c manifest.json -p $(pwd)"
 }
 ```
 
