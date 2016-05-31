@@ -1,0 +1,73 @@
+{
+  "connections": [{ "port": 3030 }],
+  "registrations": [
+    { "plugin": "vision" },
+    {
+      "plugin": {
+        "register": "visionary",
+        "options": {
+          "engines": { "pug": "pug" },
+          "path": "views",
+          "isCached": false
+        }
+      }
+    },
+    {
+      "plugin": {
+        "register": "dogwater",
+        "options": {
+          "connections": {
+            "memoryDB": {
+              "adapter": "memory"
+            }
+          },
+          "adapters": {
+            "memory": "sails-memory"
+          },
+          "models": "lib/models",
+          "fixtures": [{
+            "model": "users",
+            "items": [
+              { "name": "Guinness" },
+              { "name": "Sully" },
+              { "name": "Ren" }
+            ]
+          }]
+        }
+      }
+    },
+    { "plugin": "hapi-auth-cookie" },
+    {
+      "plugin": {
+        "register": "./plugins/login",
+        "options": {
+          "auth": {
+            "mode": "optional"
+          }
+        }
+      }
+    },
+    { "plugin": "./routes/home" },
+    {
+      "plugin": {
+        "register": "good",
+        "options": {
+          "reporters": {
+            "console": [
+              {
+                "module": "good-squeeze",
+                "name": "Squeeze",
+                "args": [{
+                  "response": "*",
+                  "log": "*"
+                }]
+              },
+              { "module": "good-console" },
+              "stdout"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

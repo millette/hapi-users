@@ -1,0 +1,27 @@
+h1 A view
+  small  ...to a user
+
+h2 P2
+
+p: a(href='/') go Home
+p: a(href='/p2') go to p2
+p: a(href='/login') Login
+p: a(href='/logout') Logout
+
+
+if ctx
+  if ctx.request.app && Object.keys(ctx.request.app).length
+    h2 App
+    p= Object.keys(ctx.request.app).join(' ')
+
+  if ctx.request.plugins && Object.keys(ctx.request.plugins).length
+    h2 Plugins
+    p= Object.keys(ctx.request.plugins).join(' ')
+
+  if ctx.request.auth
+    h2 Auth
+    pre= JSON.stringify(ctx.request.auth, null, ' ')
+
+  if ctx.request.cookieAuth
+    h2 cookieAuth
+    p= Object.keys(ctx.request.cookieAuth).join(' ')
