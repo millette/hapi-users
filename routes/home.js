@@ -4,21 +4,21 @@ exports.register = require('../lib/utils').routePlugin(
   {
     name: 'home',
     version: '0.0.0',
-    dependencies: []
+    dependencies: ['hapi-auth-cookie']
   },
   [
     {
       method: 'GET',
       path: '/',
       handler: function (request, reply) {
-        reply.view('user', { ctx: { request } })
+        reply.view('user', request.auth)
       }
     },
     {
       method: 'GET',
       path: '/p2',
       handler: function (request, reply) {
-        reply.view('p2', { ctx: { request } })
+        reply.view('user', request.auth)
       }
     },
     {

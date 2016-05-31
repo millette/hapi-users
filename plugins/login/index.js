@@ -5,7 +5,7 @@ const secure = false
 const cookiePassword = 'cookie_encryption_password_secure'
 
 exports.register = (server, options, next) => {
-  server.auth.strategy('session', 'cookie', 'optional', {
+  server.auth.strategy('session', 'cookie', 'try', {
     password: cookiePassword,
     isSecure: secure
   })
