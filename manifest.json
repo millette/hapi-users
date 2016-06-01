@@ -46,7 +46,7 @@
             "isSecure": false
           },
           "auth": {
-            "mode": "try"
+            "mode": "optional"
           }
         }
       }

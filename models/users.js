@@ -8,6 +8,13 @@ module.exports = {
     name: {
       type: 'string',
       unique: true
+    },
+    password: {
+      type: 'string'
+    },
+    email: {
+      type: 'string',
+      unique: true
     }
   }
 }

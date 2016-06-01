@@ -3,13 +3,11 @@ h1 A view
 
 h2: a(href='/') Home
 
-p: a(href='/p2') go to p2
+h3 Already Logged in
 
-if isAuthenticated
-  p: a(href='/logout') Logout
-else
-  p: a(href='/login') Login
-  p: a(href='/register') Register
+p: a(href='/p2') go to p2
+p: a(href='/logout') Logout
+p: a(href='/login') Login
 
 h2 Auth
 if credentials
