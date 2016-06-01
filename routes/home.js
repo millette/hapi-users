@@ -25,8 +25,21 @@ exports.register = require('../lib/utils').routePlugin(
       method: 'GET',
       path: '/login',
       handler: function (request, reply) {
-        request.cookieAuth.set({ bam: 'paff' })
-        reply.redirect('/')
+        if (request.auth && request.auth.isAuthenticated) {
+          reply.view('logged', request.auth)
+        } else {
+          reply.view('login', request.auth)
+        }
+      }
+    },
+    {
+      method: 'POST',
+      path: '/login',
+      handler: function (request, reply) {
+        if (request.payload && request.payload.name && request.payload.pw === 'bob') {
+          request.cookieAuth.set({ name: request.payload.name })
+        }
+        reply.redirect('/login')
       }
     },
     {
