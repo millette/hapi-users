@@ -19,20 +19,17 @@
           "connections": {
             "memoryDB": {
               "adapter": "memory"
+            },
+            "diskDB": {
+              "adapter": "disk",
+              "filePath": "./db/"
             }
           },
           "adapters": {
-            "memory": "sails-memory"
+            "memory": "sails-memory",
+            "disk": "sails-disk"
           },
-          "models": "lib/models",
-          "fixtures": [{
-            "model": "users",
-            "items": [
-              { "name": "Guinness" },
-              { "name": "Sully" },
-              { "name": "Ren" }
-            ]
-          }]
+          "models": "lib/models"
         }
       }
     },
