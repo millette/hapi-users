@@ -80,7 +80,7 @@ exports.register = require('../lib/utils').routePlugin(
 
                   Users.create(obj)
                     .then((u) => {
-                      request.cookieAuth.set({ id: u.id })
+                      request.cookieAuth.set({ id: u.id, name: u.name })
                       reply.redirect('/')
                     })
                 })
@@ -115,7 +115,7 @@ exports.register = require('../lib/utils').routePlugin(
                   console.error('ERROR:', err)
                 }
                 if (valid) {
-                  request.cookieAuth.set({ id: x[0].id })
+                  request.cookieAuth.set({ id: x[0].id, name: x[0].name })
                   reply.redirect('/')
                 } else {
                   reply.redirect('/login')
