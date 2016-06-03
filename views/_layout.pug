@@ -2,11 +2,24 @@ doctype html
 html(lang="fr")
   head
     meta(charset="utf-8")
-
     link(rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/foundation/6.2.3/foundation.min.css" type="text/css")
+    title= app.siteTitle
 
-    title pageTitle
   body
+    .top-bar
+      .top-bar-title
+        ul.menu
+          li: a(href='/')= app.siteTitle
+      //- .top-bar-left À gauche
+      .top-bar-right
+        ul.menu
+          if credentials
+            li= credentials.name
+            li: a(href='/logout') Logout
+          else
+            li: a(href='/login') Login
+            li: a(href='/register') Register
+
     .row.column
       block content
 

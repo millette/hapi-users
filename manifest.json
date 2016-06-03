@@ -1,6 +1,13 @@
 {
+  "server": {
+    "app": {
+      "siteTitle": "Hapi Goo Loki"
+    }
+  },
   "connections": [{ "port": 3030 }],
   "registrations": [
+    { "plugin": "hapi-context-app" },
+    { "plugin": "hapi-context-credentials" },
     { "plugin": "bedwetter" },
     { "plugin": "vision" },
     {

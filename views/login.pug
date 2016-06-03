@@ -4,29 +4,9 @@ block content
   h1 A view
     small  ...to a user
 
-  h2: a(href='/') Home
-
-  h3 Login page
-
-  p: a(href='/logout') Logout
-  p: a(href='/login') Login
-
   form(method='post')
     input(type='text' name='name' placeholder='name')
     br
-    input(type='text' name='pw' placeholder='password')
+    input(type='password' name='pw' placeholder='password')
     br
     input(type='submit')
-
-  h2 Auth
-  if credentials
-    h3 credentials
-    pre= JSON.stringify(credentials, null, ' ')
-
-  if artifacts
-    h3 artifacts
-    pre= JSON.stringify(artifacts, null, ' ')
-
-  if error
-    h3 error
-    pre= JSON.stringify(error, null, ' ')

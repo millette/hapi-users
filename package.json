@@ -2,8 +2,10 @@
   "name": "hapi-users",
   "version": "0.3.2",
   "description": "hapi thingy",
+  "repository": "millette/hapi-users",
   "scripts": {
     "lint": "standard",
+    "dev": "standard && rejoice -c manifest-disk.json -p $(pwd)",
     "start": "standard && rejoice -c manifest.json -p $(pwd)",
     "test": "standard && nyc ava",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
@@ -35,6 +37,8 @@
     "good-squeeze": "^3.0.1",
     "hapi": "^13.4.1",
     "hapi-auth-cookie": "^6.1.1",
+    "hapi-context-app": "file:///home/millette/ha/hapi-context-app",
+    "hapi-context-credentials": "^2.0.0",
     "pug": "^2.0.0-beta2",
     "rejoice": "^3.2.0",
     "sails-disk": "^0.10.9",

@@ -15,8 +15,10 @@ exports.register = require('../lib/utils').routePlugin(
     {
       method: 'GET',
       path: '/',
-      handler: function (request, reply) {
-        reply.view('user', request.auth)
+      handler: {
+        view: {
+          template: 'user'
+        }
       }
     },
     {
@@ -116,6 +118,15 @@ exports.register = require('../lib/utils').routePlugin(
     },
     {
       method: 'GET',
+      path: '/logout',
+      handler: {
+        view: {
+          template: 'logout'
+        }
+      }
+    },
+    {
+      method: 'POST',
       path: '/logout',
       handler: function (request, reply) {
         request.cookieAuth.clear()

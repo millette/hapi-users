@@ -4,23 +4,6 @@ block content
   h1 A view
     small  ...to a user
 
-  h2: a(href='/') Home
-
-  if isAuthenticated
-    p: a(href='/logout') Logout
-  else
-    p: a(href='/login') Login
-    p: a(href='/register') Register
-
-  h2 Auth
   if credentials
-    h3 credentials
+    h2 Credentials
     pre= JSON.stringify(credentials, null, ' ')
-
-  if artifacts
-    h3 artifacts
-    pre= JSON.stringify(artifacts, null, ' ')
-
-  if error
-    h3 error
-    pre= JSON.stringify(error, null, ' ')
