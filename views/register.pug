@@ -64,7 +64,7 @@ block scripts
       function($el, required, parent) {
         // parameter 1 is jQuery selector
         // console.log('ISINV:', $el.val(), $el.data('invalid'))
-        return $el.val() === '' ? true : ($el.data('invalid') !== "")
+        return (!required && $el.val() === '') ? true : ($el.data('invalid') !== "")
       }
 
       $(document)
