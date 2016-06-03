@@ -9,7 +9,7 @@
         "options": {
           "engines": { "pug": "pug" },
           "path": "views",
-          "isCached": false
+          "isCached": true
         }
       }
     },

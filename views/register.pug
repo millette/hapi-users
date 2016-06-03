@@ -63,9 +63,18 @@ block scripts
       Foundation.Abide.defaults.validators['available_email'] =
       function($el, required, parent) {
         // parameter 1 is jQuery selector
-        // console.log('ISINV:', $el.val(), $el.data('invalid'))
+        // console.log('ISINV:', required, $el.val(), $el.data('invalid'))
         return (!required && $el.val() === '') ? true : ($el.data('invalid') !== "")
       }
+
+      $('[name=email]').on('input', function () {
+        var yeah = $(this).data('invalid')
+        if (yeah === '') {
+          // console.log('focus:', yeah)
+          $('#yup').foundation('removeErrorClasses', $(this))
+          $(this).removeData('invalid')
+        }
+      })
 
       $(document)
         // field element is invalid
@@ -74,9 +83,10 @@ block scripts
         })
         // field element is valid
         .on("valid.zf.abide", function(ev,elem) {
-          // console.log("Field name "+elem.attr('name')+" is valid")
-          if (elem.attr('name') === 'email') {
-            emailInUse(elem.val())
+          var val = elem.val()
+          // console.log("Field name "+elem.attr('name')+" is valid " + val)
+          if (elem.attr('name') === 'email' && val !== '') {
+            emailInUse(val)
               .then(function (ret) {
                 if (ret) {
                   $('#yup').foundation('addErrorClasses', elem)
@@ -96,7 +106,7 @@ block scripts
         // to prevent form from submitting upon successful validation
         .on("submit", function(ev) {
           ev.preventDefault()
-          console.log("Submit for form id "+ev.target.id+" intercepted")
+          // console.log("Submit for form id "+ev.target.id+" intercepted")
           // $('#yup').foundation('validateForm')
         });
     })
