@@ -2,8 +2,7 @@
 
 module.exports = {
   identity: 'users',
-  // connection: 'memoryDB',
-  connection: 'diskDB',
+  connection: 'main',
   schema: false,
   attributes: {
     name: {

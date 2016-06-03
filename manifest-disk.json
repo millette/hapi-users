@@ -19,7 +19,8 @@
         "options": {
           "connections": {
             "main": {
-              "adapter": "memory"
+              "adapter": "disk",
+              "filePath": "./db/"
             }
           },
           "adapters": {
