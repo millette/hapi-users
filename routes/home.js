@@ -15,10 +15,14 @@ exports.register = require('../lib/utils').routePlugin(
     {
       method: 'GET',
       path: '/',
-      handler: {
-        view: {
-          template: 'user'
-        }
+      handler: { view: { template: 'home' } }
+    },
+    {
+      method: 'GET',
+      path: '/me',
+      config: {
+        auth: { mode: 'required' },
+        handler: { view: { template: 'me' } }
       }
     },
     {
@@ -105,7 +109,7 @@ exports.register = require('../lib/utils').routePlugin(
                 }
                 if (valid) {
                   request.cookieAuth.set({ id: x[0].id, name: x[0].name })
-                  reply.redirect('/')
+                  reply.redirect('/me')
                 } else {
                   reply.redirect('/login')
                 }
@@ -119,18 +123,20 @@ exports.register = require('../lib/utils').routePlugin(
     {
       method: 'GET',
       path: '/logout',
-      handler: {
-        view: {
-          template: 'logout'
-        }
+      config: {
+        auth: { mode: 'required' },
+        handler: { view: { template: 'logout' } }
       }
     },
     {
       method: 'POST',
       path: '/logout',
-      handler: function (request, reply) {
-        request.cookieAuth.clear()
-        reply.redirect('/')
+      config: {
+        auth: { mode: 'required' },
+        handler: function (request, reply) {
+          request.cookieAuth.clear()
+          reply.redirect('/')
+        }
       }
     },
     {

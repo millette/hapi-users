@@ -1,0 +1,9 @@
+extends ./_layout.pug
+
+block content
+  h1= credentials.name
+    small  (profile)
+
+  if credentials
+    h2 Credentials
+    pre= JSON.stringify(credentials, null, ' ')

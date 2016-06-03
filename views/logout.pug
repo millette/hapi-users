@@ -1,8 +1,8 @@
 extends ./_layout.pug
 
 block content
-  h1 A view
-    small  ...to a user
+  h1 Goodbye,
+    small= ` ${credentials.name}?`
 
   form(method='post')
     input(type='submit' value='Logout')

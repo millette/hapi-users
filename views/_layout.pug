@@ -14,7 +14,7 @@ html(lang="fr")
       .top-bar-right
         ul.menu
           if credentials
-            li= credentials.name
+            li: a(href='/me')= credentials.name
             li: a(href='/logout') Logout
           else
             li: a(href='/login') Login
