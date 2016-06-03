@@ -12,7 +12,7 @@ block content
     .row
       div(class="small-12 columns")
         label Name
-          input(type="text" pattern="number" name="name" placeholder="1234" aria-describedby="exampleHelpText" required)
+          input(type="text" data-validator="available_name" name="name" placeholder="1234" aria-describedby="exampleHelpText" required)
           span(class="form-error") Yo, you had better fill this out, it's required.
         p(class="help-text" id="exampleHelpText") Here's how you use this input field!
 
@@ -43,6 +43,21 @@ block content
 block scripts
   script(type="text/javascript").
     $(function () {
+      var nameInUse = function (name) {
+        // console.log('Is name already in use?', email)
+        return new Promise(function (resolve, reject) {
+          $.getJSON(`/api/by/name/users/${name}`)
+            .done(function (data) {
+              // console.log('AJAX-DATA:', email, data)
+              resolve(true)
+            })
+            .fail(function () {
+              // console.log('AJAX-DATA-FAIL:', email)
+              resolve(false)
+            })
+        })
+      }
+
       var emailInUse = function (email) {
         // console.log('Is email already in use?', email)
         return new Promise(function (resolve, reject) {
@@ -67,10 +82,26 @@ block scripts
         return (!required && $el.val() === '') ? true : ($el.data('invalid') !== "")
       }
 
+      Foundation.Abide.defaults.validators['available_name'] =
+      function($el, required, parent) {
+        // parameter 1 is jQuery selector
+        // console.log('ISINV:', required, $el.val(), $el.data('invalid'))
+        return (!required && $el.val() === '') ? true : ($el.data('invalid') !== "")
+      }
+
       $('[name=email]').on('input', function () {
         var yeah = $(this).data('invalid')
+        // console.log('email input:', yeah)
         if (yeah === '') {
-          // console.log('focus:', yeah)
+          $('#yup').foundation('removeErrorClasses', $(this))
+          $(this).removeData('invalid')
+        }
+      })
+
+      $('[name=name]').on('input', function () {
+        var yeah = $(this).data('invalid')
+        // console.log('name input:', yeah)
+        if (yeah === '') {
           $('#yup').foundation('removeErrorClasses', $(this))
           $(this).removeData('invalid')
         }
@@ -85,7 +116,8 @@ block scripts
         .on("valid.zf.abide", function(ev,elem) {
           var val = elem.val()
           // console.log("Field name "+elem.attr('name')+" is valid " + val)
-          if (elem.attr('name') === 'email' && val !== '') {
+          if (val === '') { return }
+          if (elem.attr('name') === 'email') {
             emailInUse(val)
               .then(function (ret) {
                 if (ret) {
@@ -93,6 +125,16 @@ block scripts
                 }
               })
           }
+
+          if (elem.attr('name') === 'name') {
+            nameInUse(val)
+              .then(function (ret) {
+                if (ret) {
+                  $('#yup').foundation('addErrorClasses', elem)
+                }
+              })
+          }
+
         })
         // form validation failed
         .on("forminvalid.zf.abide", function(ev,frm) {
@@ -105,7 +147,7 @@ block scripts
         })
         // to prevent form from submitting upon successful validation
         .on("submit", function(ev) {
-          ev.preventDefault()
+          // ev.preventDefault()
           // console.log("Submit for form id "+ev.target.id+" intercepted")
           // $('#yup').foundation('validateForm')
         });

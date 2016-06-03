@@ -132,6 +132,17 @@ exports.register = require('../lib/utils').routePlugin(
           pkAttr: 'email'
         }
       }
+    },
+    {
+      method: 'GET',
+      path: '/api/by/name/users/{name}',
+      handler: {
+        bedwetter: {
+          omit: ['password', 'email', 'id', 'createdAt', 'updatedAt'],
+          prefix: '/api/by/name',
+          pkAttr: 'name'
+        }
+      }
     }
   ]
 )
