@@ -44,11 +44,17 @@ block scripts
   script(type="text/javascript").
     $(function () {
       var emailInUse = function (email) {
-        console.log('Is email already in use?', email)
+        // console.log('Is email already in use?', email)
         return new Promise(function (resolve, reject) {
-          setTimeout(function () {
-            resolve(false)
-          }, 1000)
+          $.getJSON(`/api/by/email/users/${email}`)
+            .done(function (data) {
+              // console.log('AJAX-DATA:', email, data)
+              resolve(true)
+            })
+            .fail(function () {
+              // console.log('AJAX-DATA-FAIL:', email)
+              resolve(false)
+            })
         })
       }
 
@@ -57,28 +63,18 @@ block scripts
       Foundation.Abide.defaults.validators['available_email'] =
       function($el, required, parent) {
         // parameter 1 is jQuery selector
-        console.log('ISINV:', $el.val(), $el.data('invalid'))
+        // console.log('ISINV:', $el.val(), $el.data('invalid'))
         return $el.val() === '' ? true : ($el.data('invalid') !== "")
-        /*
-        if (!required) return true;
-        var from = $('#'+$el.attr('data-greater-than')).val(),
-            to = $el.val();
-        return (parseInt(to) > parseInt(from))
-        */
       }
-
-
-      console.log('doc ready')
 
       $(document)
         // field element is invalid
         .on("invalid.zf.abide", function(ev,elem) {
-          // console.log("AA-Field id "+ev.target.id+" is invalid");
-          console.log("AA-Field name "+elem.attr('name')+" is invalid");
+          // console.log("AA-Field name "+elem.attr('name')+" is invalid");
         })
         // field element is valid
         .on("valid.zf.abide", function(ev,elem) {
-          console.log("Field name "+elem.attr('name')+" is valid")
+          // console.log("Field name "+elem.attr('name')+" is valid")
           if (elem.attr('name') === 'email') {
             emailInUse(elem.val())
               .then(function (ret) {
@@ -90,11 +86,11 @@ block scripts
         })
         // form validation failed
         .on("forminvalid.zf.abide", function(ev,frm) {
-          console.log("FORM id "+ev.target.id+" is INVALID")
+          // console.log("FORM id "+ev.target.id+" is INVALID")
         })
         // form validation passed, form will submit if submit event not returned false
         .on("formvalid.zf.abide", function(ev,frm) {
-          console.log("FORM id "+frm.attr('id')+" is VALID")
+          // console.log("FORM id "+frm.attr('id')+" is VALID")
           // ajax post form
         })
         // to prevent form from submitting upon successful validation

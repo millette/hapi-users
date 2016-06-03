@@ -1,6 +1,7 @@
 {
   "connections": [{ "port": 3030 }],
   "registrations": [
+    { "plugin": "bedwetter" },
     { "plugin": "vision" },
     {
       "plugin": {
