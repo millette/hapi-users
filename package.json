@@ -1,6 +1,6 @@
 {
   "name": "hapi-users",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "hapi thingy",
   "scripts": {
     "lint": "standard",
