@@ -1,25 +1,26 @@
-h1 A view
-  small  ...to a user
+extends ./_layout.pug
 
-h2: a(href='/') Home
+block content
+  h1 A view
+    small  ...to a user
 
-p: a(href='/p2') go to p2
+  h2: a(href='/') Home
 
-if isAuthenticated
-  p: a(href='/logout') Logout
-else
-  p: a(href='/login') Login
-  p: a(href='/register') Register
+  if isAuthenticated
+    p: a(href='/logout') Logout
+  else
+    p: a(href='/login') Login
+    p: a(href='/register') Register
 
-h2 Auth
-if credentials
-  h3 credentials
-  pre= JSON.stringify(credentials, null, ' ')
+  h2 Auth
+  if credentials
+    h3 credentials
+    pre= JSON.stringify(credentials, null, ' ')
 
-if artifacts
-  h3 artifacts
-  pre= JSON.stringify(artifacts, null, ' ')
+  if artifacts
+    h3 artifacts
+    pre= JSON.stringify(artifacts, null, ' ')
 
-if error
-  h3 error
-  pre= JSON.stringify(error, null, ' ')
+  if error
+    h3 error
+    pre= JSON.stringify(error, null, ' ')

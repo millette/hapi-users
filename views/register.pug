@@ -1,14 +1,106 @@
-h1 Register
+extends ./_layout.pug
 
-h2 Créer votre compte
+block content
+  h1 Register
 
-form(method='post')
-  input(type='text' name='name' required placeholder='name')
-  br
-  input(type='email' name='email' placeholder='email')
-  br
-  input(type='text' name='pw' required placeholder='password')
-  br
-  input(type='text' name='pw2' required placeholder='répétez votre password')
-  br
-  input(type='submit')
+  h2 Créer votre compte
+
+  form#yup(data-abide novalidate method='post')
+    div(data-abide-error class="alert callout" style="display: none;")
+      p: i(class="fi-alert") There are some errors in your form.
+
+    .row
+      div(class="small-12 columns")
+        label Name
+          input(type="text" pattern="number" name="name" placeholder="1234" aria-describedby="exampleHelpText" required)
+          span(class="form-error") Yo, you had better fill this out, it's required.
+        p(class="help-text" id="exampleHelpText") Here's how you use this input field!
+
+      div(class="small-12 columns")
+        label Email
+          input(type="email" data-validator="available_email" name="email" placeholder="Use me, or don't" aria-describedby="exampleHelpTex")
+          span(class="form-error") Email is already in use. Make sure you don't already have an account.
+        p(class="help-text" id="exampleHelpTex") Optional email.
+
+      div(class="small-12 columns")
+        label Password Required
+          input(type="password" name='pw' id="password" placeholder="yeti4preZ" aria-describedby="exampleHelpText" required)
+          span(class="form-error") I'm required!
+        p(class="help-text" id="exampleHelpText") Enter a password please.
+
+      div(class="small-12 columns")
+        label Re-enter Password
+          input(type="password" name='pw2' placeholder="yeti4preZ" aria-describedby="exampleHelpText2" required pattern="alpha_numeric" data-equalto="password")
+          span(class="form-error") Hey, passwords are supposed to match!
+        p(class="help-text" id="exampleHelpText2") This field is using the `data-equalto="password"` attribute, causing it to match the password field above.
+
+    .row
+      fieldset(class="small-6 columns")
+        button(class="button" type="submit" value="Submit") Submit
+      fieldset(class="small-6 columns")
+      button(class="button" type="reset" value="Reset") Reset
+
+block scripts
+  script(type="text/javascript").
+    $(function () {
+      var emailInUse = function (email) {
+        console.log('Is email already in use?', email)
+        return new Promise(function (resolve, reject) {
+          setTimeout(function () {
+            resolve(false)
+          }, 1000)
+        })
+      }
+
+      $(document).foundation()
+
+      Foundation.Abide.defaults.validators['available_email'] =
+      function($el, required, parent) {
+        // parameter 1 is jQuery selector
+        console.log('ISINV:', $el.val(), $el.data('invalid'))
+        return $el.val() === '' ? true : ($el.data('invalid') !== "")
+        /*
+        if (!required) return true;
+        var from = $('#'+$el.attr('data-greater-than')).val(),
+            to = $el.val();
+        return (parseInt(to) > parseInt(from))
+        */
+      }
+
+
+      console.log('doc ready')
+
+      $(document)
+        // field element is invalid
+        .on("invalid.zf.abide", function(ev,elem) {
+          // console.log("AA-Field id "+ev.target.id+" is invalid");
+          console.log("AA-Field name "+elem.attr('name')+" is invalid");
+        })
+        // field element is valid
+        .on("valid.zf.abide", function(ev,elem) {
+          console.log("Field name "+elem.attr('name')+" is valid")
+          if (elem.attr('name') === 'email') {
+            emailInUse(elem.val())
+              .then(function (ret) {
+                if (ret) {
+                  $('#yup').foundation('addErrorClasses', elem)
+                }
+              })
+          }
+        })
+        // form validation failed
+        .on("forminvalid.zf.abide", function(ev,frm) {
+          console.log("FORM id "+ev.target.id+" is INVALID")
+        })
+        // form validation passed, form will submit if submit event not returned false
+        .on("formvalid.zf.abide", function(ev,frm) {
+          console.log("FORM id "+frm.attr('id')+" is VALID")
+          // ajax post form
+        })
+        // to prevent form from submitting upon successful validation
+        .on("submit", function(ev) {
+          ev.preventDefault()
+          console.log("Submit for form id "+ev.target.id+" intercepted")
+          // $('#yup').foundation('validateForm')
+        });
+    })

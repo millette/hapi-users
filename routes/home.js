@@ -21,20 +21,10 @@ exports.register = require('../lib/utils').routePlugin(
     },
     {
       method: 'GET',
-      path: '/p2',
-      handler: function (request, reply) {
-        reply.view('user', request.auth)
-      }
-    },
-    {
-      method: 'GET',
       path: '/register',
       handler: function (request, reply) {
-        if (request.auth && request.auth.isAuthenticated) {
-          reply.redirect('/')
-        } else {
-          reply.view('register', request.auth)
-        }
+        const template = request.auth && request.auth.isAuthenticated ? 'logged' : 'register'
+        reply.view(template, request.auth)
       }
     },
     {
@@ -92,11 +82,8 @@ exports.register = require('../lib/utils').routePlugin(
       method: 'GET',
       path: '/login',
       handler: function (request, reply) {
-        if (request.auth && request.auth.isAuthenticated) {
-          reply.view('logged', request.auth)
-        } else {
-          reply.view('login', request.auth)
-        }
+        const template = request.auth && request.auth.isAuthenticated ? 'logged' : 'login'
+        reply.view(template, request.auth)
       }
     },
     {

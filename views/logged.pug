@@ -1,23 +1,11 @@
-h1 A view
-  small  ...to a user
+extends ./_layout.pug
 
-h2: a(href='/') Home
+block content
+  h1 A view
+    small  ...to a user
 
-h3 Already Logged in
+  h2: a(href='/') Home
 
-p: a(href='/p2') go to p2
-p: a(href='/logout') Logout
-p: a(href='/login') Login
+  h3 Already Logged in
 
-h2 Auth
-if credentials
-  h3 credentials
-  pre= JSON.stringify(credentials, null, ' ')
-
-if artifacts
-  h3 artifacts
-  pre= JSON.stringify(artifacts, null, ' ')
-
-if error
-  h3 error
-  pre= JSON.stringify(error, null, ' ')
+  p: a(href='/logout') Logout
