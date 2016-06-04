@@ -34,6 +34,21 @@ exports.register = require('../lib/utils').routePlugin(
     },
     {
       method: 'GET',
+      path: '/users/{name}',
+      handler: function (request, reply) {
+        const Users = request.collections.users
+        // console.log(request.params)
+        Users.findOne({name: request.params.name})
+          .then((user) => {
+            delete user.password
+            delete user.email
+            delete user.id
+            reply.view('public-profile', { user })
+          })
+      }
+    },
+    {
+      method: 'GET',
       path: '/register',
       handler: function (request, reply) {
         const template = request.auth && request.auth.isAuthenticated ? 'logged' : 'register'

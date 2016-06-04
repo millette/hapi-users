@@ -1,14 +1,11 @@
 extends ./_layout.pug
 
 block content
-  h1= credentials.name
+  h1= user.name
     small  (profile)
 
-  h2 Profile
+  h2 Profile public
   dl
     each f in Object.keys(user)
       dt= f
       dd= user[f]
-
-  p= 'Votre profile public: '
-    a(href='/users/' + credentials.name)= credentials.name
