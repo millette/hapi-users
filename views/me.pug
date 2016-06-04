@@ -4,6 +4,8 @@ block content
   h1= credentials.name
     small  (profile)
 
-  if credentials
-    h2 Credentials
-    pre= JSON.stringify(credentials, null, ' ')
+  h2 Profile
+  dl
+    each f in Object.keys(user)
+      dt= f
+      dd= user[f]

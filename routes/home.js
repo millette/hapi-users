@@ -22,7 +22,14 @@ exports.register = require('../lib/utils').routePlugin(
       path: '/me',
       config: {
         auth: { mode: 'required' },
-        handler: { view: { template: 'me' } }
+        handler: function (request, reply) {
+          const Users = request.collections.users
+          Users.findOne(request.auth.credentials.id)
+            .then((user) => {
+              delete user.password
+              reply.view('me', { user })
+            })
+        }
       }
     },
     {
