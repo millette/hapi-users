@@ -2,6 +2,7 @@
 
 // npm
 const bcrypt = require('bcrypt')
+const got = require('got')
 
 const saltRounds = 10
 
@@ -16,6 +17,43 @@ exports.register = require('../lib/utils').routePlugin(
       method: 'GET',
       path: '/',
       handler: { view: { template: 'home' } }
+    },
+    {
+      method: 'GET',
+      path: '/init',
+      config: {
+        auth: false,
+        handler: function (request, reply) {
+          if (request.server.settings.app.vault) {
+            return reply.redirect('/')
+          }
+          reply.view('init')
+        }
+      }
+    },
+    {
+      method: 'POST',
+      path: '/init',
+      config: {
+        auth: false,
+        handler: function (request, reply) {
+          if (request.server.settings.app.vault) {
+            return reply.redirect('/')
+          }
+
+          if (!request.payload || !request.payload.name || !request.payload.password) {
+            return reply.view('init', { error: 'Username and password required.' })
+          }
+          got('https://btcart.com/now-vault/', { auth: `${request.payload.name}:${request.payload.password}` })
+            .then((res) => {
+              request.server.settings.app.vault = JSON.parse(res.body)
+              reply.redirect('/')
+            })
+            .catch((err) => {
+              reply.view('init', { error: err })
+            })
+        }
+      }
     },
     {
       method: 'GET',

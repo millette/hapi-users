@@ -7,3 +7,6 @@ block content
   if credentials
     h2 Credentials
     pre= JSON.stringify(credentials, null, ' ')
+
+  if app && app.vault
+    pre= JSON.stringify(app.vault, null, ' ')
