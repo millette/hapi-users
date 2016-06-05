@@ -1,6 +1,6 @@
 {
   "name": "hapi-users",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "hapi thingy",
   "repository": "millette/hapi-users",
   "scripts": {
