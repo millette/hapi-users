@@ -12,3 +12,16 @@ block content
 
   p= 'Votre profile public: '
     a(href='/users/' + credentials.name)= credentials.name
+
+  if app && app.vault && credentials.name === app.vault.auth
+    h3 Vault
+    pre= JSON.stringify(app.vault, null, ' ')
+
+    if user.needsPassword
+      h3 New password
+      form(method='post')
+        input(type='password' name='pw' required)
+        br
+        input(type='password' name='pw2' required)
+        br
+        input(type='submit')

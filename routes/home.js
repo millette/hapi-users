@@ -34,25 +34,25 @@ exports.register = require('../lib/utils').routePlugin(
     {
       method: 'POST',
       path: '/init',
-      config: {
-        auth: false,
-        handler: function (request, reply) {
-          if (request.server.settings.app.vault) {
-            return reply.redirect('/')
-          }
-
-          if (!request.payload || !request.payload.name || !request.payload.password) {
-            return reply.view('init', { error: 'Username and password required.' })
-          }
-          got('https://btcart.com/now-vault/', { auth: `${request.payload.name}:${request.payload.password}` })
-            .then((res) => {
-              request.server.settings.app.vault = JSON.parse(res.body)
-              reply.redirect('/')
-            })
-            .catch((err) => {
-              reply.view('init', { error: err })
-            })
+      handler: function (request, reply) {
+        if (request.server.settings.app.vault) { return reply.redirect('/') }
+        if (!request.payload || !request.payload.name || !request.payload.password) {
+          return reply.view('init', { error: 'Username and password required.' })
         }
+
+        const p1 = got('https://btcart.com/now-vault/', { auth: `${request.payload.name}:${request.payload.password}` })
+
+        const Users = request.collections.users
+        const p2 = Users.findOrCreate({ name: request.payload.name })
+
+        Promise.all([p1, p2])
+          .then((pp) => {
+            const res = pp[0]
+            request.server.settings.app.vault = JSON.parse(res.body)
+            request.cookieAuth.set({ id: pp[1].id, name: pp[1].name })
+            reply.redirect('/me')
+          })
+          .catch((err) => { reply.view('init', { error: err }) })
       }
     },
     {
@@ -64,9 +64,35 @@ exports.register = require('../lib/utils').routePlugin(
           const Users = request.collections.users
           Users.findOne(request.auth.credentials.id)
             .then((user) => {
-              delete user.password
+              if (user.password) {
+                delete user.password
+              } else {
+                user.needsPassword = true
+              }
               reply.view('me', { user })
             })
+        }
+      }
+    },
+    {
+      method: 'POST',
+      path: '/me',
+      config: {
+        auth: { mode: 'required' },
+        handler: function (request, reply) {
+          if (!request.payload.pw || !request.payload.pw2 || request.payload.pw !== request.payload.pw2) {
+            return reply.redirect('me')
+          }
+
+          bcrypt.hash(request.payload.pw, saltRounds, (err, hash) => {
+            if (err) {
+              console.error('ERROR:', err)
+              reply.redirect('me')
+            }
+            const Users = request.collections.users
+            Users.update(request.auth.credentials.id, { password: hash })
+              .then(() => reply.redirect('me'))
+          })
         }
       }
     },
@@ -75,7 +101,6 @@ exports.register = require('../lib/utils').routePlugin(
       path: '/users/{name}',
       handler: function (request, reply) {
         const Users = request.collections.users
-        // console.log(request.params)
         Users.findOne({name: request.params.name})
           .then((user) => {
             delete user.password
@@ -137,7 +162,7 @@ exports.register = require('../lib/utils').routePlugin(
                   Users.create(obj)
                     .then((u) => {
                       request.cookieAuth.set({ id: u.id, name: u.name })
-                      reply.redirect('/')
+                      reply.redirect('/me')
                     })
                 })
               })
@@ -162,7 +187,7 @@ exports.register = require('../lib/utils').routePlugin(
           { email: request.payload.name }
         ]})
           .then((x) => {
-            if (x.length === 1) {
+            if (x.length === 1 && request.payload.pw) {
               bcrypt.compare(request.payload.pw, x[0].password, function (err, valid) {
                 if (err) {
                   console.error('ERROR:', err)
