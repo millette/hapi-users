@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "standard",
     "start": "standard && rejoice -c manifest-disk.json -p $(pwd)",
-    "now-start": "rejoice -c manifest.json -p $(pwd)",
+    "now-start": "./node_modules/.bin/rejoice -c manifest.json -p $(pwd)",
     "test": "standard && nyc ava",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
