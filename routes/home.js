@@ -25,9 +25,7 @@ exports.register = require('../lib/utils').routePlugin(
       config: {
         auth: false,
         handler: function (request, reply) {
-          if (request.server.settings.app.vault) {
-            return reply.redirect('/')
-          }
+          if (request.server.settings.app.vault) { return reply.redirect('/') }
           reply.view('init')
         }
       }
@@ -60,9 +58,7 @@ exports.register = require('../lib/utils').routePlugin(
       path: '/load',
       config: {
         auth: { mode: 'required' },
-        handler: function (request, reply) {
-          reply.view('load', { human: human, load: request.server.load })
-        }
+        handler: (request, reply) => reply.view('load', { human: human, load: request.server.load })
       }
     },
     {
@@ -90,18 +86,15 @@ exports.register = require('../lib/utils').routePlugin(
       config: {
         auth: { mode: 'required' },
         handler: function (request, reply) {
-          if (!request.payload.pw || !request.payload.pw2 || request.payload.pw !== request.payload.pw2) {
-            return reply.redirect('me')
-          }
+          if (!request.payload.pw || !request.payload.pw2 || request.payload.pw !== request.payload.pw2) { return reply.redirect('me') }
 
           bcrypt.hash(request.payload.pw, saltRounds, (err, hash) => {
             if (err) {
               console.error('ERROR:', err)
-              reply.redirect('me')
+              return reply.redirect('me')
             }
             const Users = request.collections.users
-            Users.update(request.auth.credentials.id, { password: hash })
-              .then(() => reply.redirect('me'))
+            Users.update(request.auth.credentials.id, { password: hash }).then(() => reply.redirect('me'))
           })
         }
       }
@@ -123,51 +116,40 @@ exports.register = require('../lib/utils').routePlugin(
     {
       method: 'GET',
       path: '/register',
-      handler: function (request, reply) {
-        const template = request.auth && request.auth.isAuthenticated ? 'logged' : 'register'
-        reply.view(template, request.auth)
-      }
+      handler: (request, reply) => reply.view(request.auth && request.auth.isAuthenticated ? 'logged' : 'register')
     },
     {
       method: 'POST',
       path: '/register',
       handler: function (request, reply) {
-        if (!request.payload.name || !request.payload.pw) {
-          // missing/empty fields
-          return reply.redirect('/register')
-        }
-        if (request.payload.pw !== request.payload.pw2) {
-          // passwords don't match
-          return reply.redirect('/register')
-        }
+        // missing/empty fields
+        if (!request.payload.name || !request.payload.pw) { return reply.redirect('/register') }
+
+        // passwords don't match
+        if (request.payload.pw !== request.payload.pw2) { return reply.redirect('/register') }
 
         const Users = request.collections.users
         Users.findOneByName(request.payload.name)
           .then((z) => {
-            if (z) {
-              // name already exists
-              return reply.redirect('/register')
-            }
+            // name already exists
+            if (z) { return reply.redirect('/register') }
 
             Users.findOneByEmail(request.payload.email)
               .then((z) => {
-                if (z) {
-                  // email already exists
-                  return reply.redirect('/register')
-                }
+                // email already exists
+                if (z) { return reply.redirect('/register') }
 
                 bcrypt.hash(request.payload.pw, saltRounds, function (err, hash) {
                   if (err) {
                     console.error('ERROR:', err)
+                    return reply.redirect('register')
                   }
 
                   const obj = {
                     name: request.payload.name,
                     password: hash
                   }
-                  if (request.payload.email) {
-                    obj.email = request.payload.email
-                  }
+                  if (request.payload.email) { obj.email = request.payload.email }
 
                   Users.create(obj)
                     .then((u) => {
@@ -199,9 +181,7 @@ exports.register = require('../lib/utils').routePlugin(
           .then((x) => {
             if (x.length === 1 && request.payload.pw) {
               bcrypt.compare(request.payload.pw, x[0].password, function (err, valid) {
-                if (err) {
-                  console.error('ERROR:', err)
-                }
+                if (err) { console.error('ERROR:', err) }
                 if (valid) {
                   request.cookieAuth.set({ id: x[0].id, name: x[0].name })
                   reply.redirect('/me')
