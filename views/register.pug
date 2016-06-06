@@ -1,6 +1,52 @@
 extends ./_layout.pug
 
 block content
+  style.
+    fieldset.hidden {
+      display: none;
+    }
+
+    .row.roshambo input[type="radio"] {
+      /*visibility: hidden;*/
+    }
+
+    .row.roshambo input[type="radio"] + label {
+      width: 100%;
+      text-align: center;
+      /* FIXME */
+      min-height: 240px;
+      background-color: #f8f8ff;
+      -webkit-transition: background-color 0.25s 0.25s;
+      transition: background-color 0.25s 0.25s;
+    }
+
+    .row.roshambo input[type="radio"]:checked + label {
+      background-color: transparent;
+      font-weight: bold;
+      font-size: 120%;
+    }
+
+    .row.roshambo input[type="radio"] + label > img {
+      -webkit-transition: width 0.25s;
+      transition: width 0.25s;
+      width: 70%;
+      max-width: 200px;
+    }
+
+    .row.roshambo input[type="radio"]:checked + label > img {
+      width: 90%;
+    }
+
+    .row.roshambo img.flipped {
+      -moz-transform: scaleX(-1);
+      -o-transform: scaleX(-1);
+      -webkit-transform: scaleX(-1);
+      transform: scaleX(-1);
+      filter: FlipH;
+      -ms-filter: "FlipH";
+      width: 90%;
+    }
+
   h1 Register
 
   h2 Créer votre compte
@@ -34,6 +80,60 @@ block content
           span(class="form-error") Hey, passwords are supposed to match!
         p(class="help-text" id="exampleHelpText2") This field is using the `data-equalto="password"` attribute, causing it to match the password field above.
 
+      fieldset(class="small-12 columns hidden")
+        .row.column
+          br
+          p Ne jouez pas contre le robot! <i>C'est une attrape anti-spam.</i>
+
+        .row.roshambo
+          div(class="small-3 columns")
+            input(type='radio' name='roshambo2' value='roche' id='roshambo2Roche' required)
+            label(for='roshambo2Roche') Roche
+              br
+              img(src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Rock-paper-scissors_%28rock%29.png/240px-Rock-paper-scissors_%28rock%29.png' alt='Roche' title='Roche')
+
+          div(class="small-3 columns")
+            input(type='radio' name='roshambo2' value='papier' id='roshambo2Papier' required)
+            label(for='roshambo2Papier') Papier
+              br
+              img(src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Rock-paper-scissors_%28paper%29.png/240px-Rock-paper-scissors_%28paper%29.png' alt='Papier' title='Papier')
+
+          div(class="small-3 columns")
+            input(type='radio' name='roshambo2' value='ciseau' id='roshambo2Ciseau' required)
+            label(for='roshambo2Ciseau') Ciseau
+              br
+              img(src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Rock-paper-scissors_%28scissors%29.png/240px-Rock-paper-scissors_%28scissors%29.png' alt='Ciseau' title='Ciseau')
+
+          div(class="small-3 columns")
+            img(src='http://revealproject.eu/wp-content/uploads/Image-blog-on-automated-journalism-700x325.png')
+
+      fieldset(class="small-12 columns")
+        p Dans le but de prévenir le <i>spam</i>, je vous propose une petite partie de Roche-Papier-Ciseau.
+        p Pouvez-vous battre ma main? <i>J'ai déjà joué.</i>
+        .row.roshambo
+          div(class="small-3 columns")
+            input(type='radio' name='roshambo' value='roche' id='roshamboRoche' required)
+            label(for='roshamboRoche') Roche
+              br
+              img(src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Rock-paper-scissors_%28rock%29.png/240px-Rock-paper-scissors_%28rock%29.png' alt='Roche' title='Roche')
+
+          div(class="small-3 columns")
+            input(type='radio' name='roshambo' value='papier' id='roshamboPapier' required)
+            label(for='roshamboPapier') Papier
+              br
+              img(src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Rock-paper-scissors_%28paper%29.png/240px-Rock-paper-scissors_%28paper%29.png' alt='Papier' title='Papier')
+
+          div(class="small-3 columns")
+            input(type='radio' name='roshambo' value='ciseau' id='roshamboCiseau' required)
+            label(for='roshamboCiseau') Ciseau
+              br
+              img(src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Rock-paper-scissors_%28scissors%29.png/240px-Rock-paper-scissors_%28scissors%29.png' alt='Ciseau' title='Ciseau')
+
+          div(class="small-3 columns")
+            img.flipped(src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Rock-paper-scissors_%28rock%29.png/240px-Rock-paper-scissors_%28rock%29.png' alt='Vous devez battre Roche' title='Vous devez battre Roche')
+            | Roche
+
+    br
     .row
       fieldset(class="small-6 columns")
         button(class="button" type="submit" value="Submit") Submit
