@@ -142,28 +142,37 @@ exports.register = require('../lib/utils').routePlugin(
       handler: function (request, reply) {
         // missing/empty fields
         if (!request.payload.name || !request.payload.pw) { return reply.redirect('/register') }
-
+        console.log('ok1')
         // passwords don't match
         if (request.payload.pw !== request.payload.pw2) { return reply.redirect('/register') }
+        console.log('ok2')
 
         // failed antispam
-        if (!request.payload.roshambo || request.payload.roshambo2 || request.payload.roshambo === request.state.antispam.roshambo.toBeat) {
+        if (!request.state.antispam || !request.state.antispam.roshambo.toBeat || !request.payload.roshambo || request.payload.roshambo2 || request.payload.roshambo === request.state.antispam.roshambo.toBeat) {
           return reply.redirect('/register')
         }
+        console.log('ok3')
 
         switch (request.payload.roshambo) {
           case 'roche':
+            console.log('ok5')
             if (request.state.antispam.roshambo.toBeat === 'papier') { return reply.redirect('/register') }
+            console.log('ok5a')
             break
 
           case 'papier':
+            console.log('ok6')
             if (request.state.antispam.roshambo.toBeat === 'ciseaux') { return reply.redirect('/register') }
+            console.log('ok6a')
             break
 
           case 'ciseaux':
+            console.log('ok7')
             if (request.state.antispam.roshambo.toBeat === 'roche') { return reply.redirect('/register') }
+            console.log('ok7a')
             break
         }
+        console.log('ok9')
 
         const Users = request.collections.users
         Users.findOneByName(request.payload.name)
