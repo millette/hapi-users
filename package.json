@@ -40,6 +40,7 @@
     "hapi-auth-cookie": "^6.1.1",
     "hapi-context-app": "^0.1.1",
     "hapi-context-credentials": "^2.0.0",
+    "human-format": "^0.6.0",
     "pug": "^2.0.0-beta2",
     "rejoice": "^3.2.0",
     "sails-disk": "^0.10.9",

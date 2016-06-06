@@ -2,6 +2,9 @@
   "server": {
     "app": {
       "siteTitle": "Hapi Goo Loki"
+    },
+    "load": {
+      "sampleInterval": 1000
     }
   },
   "connections": [{ "port": 3030 }],

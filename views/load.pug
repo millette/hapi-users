@@ -1,0 +1,17 @@
+extends ./_layout.pug
+
+block content
+  h1 Server load
+
+  if load && load.rss
+    dl
+      dt Event loop delay
+      dd= `${Math.round(1000 * Math.max(load.eventLoopDelay, 0)) / 1000} s`
+
+      dt Heap used
+      dd= human(load.heapUsed)
+
+      dt RSS
+      dd= human(load.rss)
+  else
+    p Load monitoring disabled.

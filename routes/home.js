@@ -3,6 +3,7 @@
 // npm
 const bcrypt = require('bcrypt')
 const got = require('got')
+const human = require('human-format')
 
 const saltRounds = 10
 
@@ -53,6 +54,16 @@ exports.register = require('../lib/utils').routePlugin(
             reply.redirect('/me')
           })
           .catch((err) => { reply.view('init', { error: err }) })
+      }
+    },
+    {
+      method: 'GET',
+      path: '/load',
+      config: {
+        auth: { mode: 'required' },
+        handler: function (request, reply) {
+          reply.view('load', { human: human, load: request.server.load })
+        }
       }
     },
     {
