@@ -41,8 +41,7 @@ exports.register = require('../lib/utils').routePlugin(
           return reply.view('init', { error: 'Username and password required.' })
         }
 
-        const p1 = got('https://btcart.com/now-vault/', { auth: `${request.payload.name}:${request.payload.password}` })
-
+        const p1 = got(request.server.settings.app.vaultUrl, { auth: `${request.payload.name}:${request.payload.password}` })
         const Users = request.collections.users
         const p2 = Users.findOrCreate({ name: request.payload.name })
 

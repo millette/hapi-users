@@ -1,7 +1,8 @@
 {
   "server": {
     "app": {
-      "siteTitle": "Hapi Goo Loki"
+      "siteTitle": "Hapi Goo Loki",
+      "vaultUrl": "https://btcart.com/now-vault/"
     },
     "load": {
       "sampleInterval": 1000
