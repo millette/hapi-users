@@ -1,13 +1,41 @@
 extends ./_layout.pug
 
+mixin toBeat
+  div(class="small-3 columns")
+    case antispam.roshambo.toBeat
+      when 'roche'
+        img.flipped(src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Rock-paper-scissors_%28rock%29.png/240px-Rock-paper-scissors_%28rock%29.png' alt='Vous devez battre Roche' title='Vous devez battre Roche')
+        | Roche
+
+      when 'papier'
+        img.flipped(src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Rock-paper-scissors_%28paper%29.png/240px-Rock-paper-scissors_%28paper%29.png' alt='Papier' title='Papier')
+        | Papier
+
+      when 'ciseaux'
+        img.flipped(src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Rock-paper-scissors_%28scissors%29.png/240px-Rock-paper-scissors_%28scissors%29.png' alt='Ciseaux' title='Ciseaux')
+        | Ciseaux
+
+mixin hand(name, fake)
+  div(class="small-3 columns")
+    if fake
+      input(data-abide-ignore type='radio' name='roshambo2' value=name id='roshambo2' + name)
+    else
+      input(type='radio' name='roshambo' value=name id='roshambo' + name)
+
+    label(for=`roshambo${fake ? '2' : ''}${name}`)= name
+      br
+      case name
+        when 'roche'
+          img(src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Rock-paper-scissors_%28rock%29.png/240px-Rock-paper-scissors_%28rock%29.png' alt='Roche' title='Roche')
+        when 'papier'
+          img(src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Rock-paper-scissors_%28paper%29.png/240px-Rock-paper-scissors_%28paper%29.png' alt='Papier' title='Papier')
+        when 'ciseaux'
+          img(src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Rock-paper-scissors_%28scissors%29.png/240px-Rock-paper-scissors_%28scissors%29.png' alt='Ciseaux' title='Ciseaux')
+
 block content
   style.
     fieldset.hidden {
       display: none;
-    }
-
-    .row.roshambo input[type="radio"] {
-      /*visibility: hidden;*/
     }
 
     .row.roshambo input[type="radio"] + label {
@@ -48,8 +76,6 @@ block content
     }
 
   h1 Register
-    if antispam && antispam.roshambo
-      small= antispam.roshambo
 
   h2 Créer votre compte
 
@@ -88,24 +114,9 @@ block content
           p Ne jouez pas contre le robot! <i>C'est une attrape anti-spam.</i>
 
         .row.roshambo
-          div(class="small-3 columns")
-            input(data-abide-ignore type='radio' name='roshambo2' value='roche' id='roshambo2Roche' required)
-            label(for='roshambo2Roche') Roche
-              br
-              img(src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Rock-paper-scissors_%28rock%29.png/240px-Rock-paper-scissors_%28rock%29.png' alt='Roche' title='Roche')
-
-          div(class="small-3 columns")
-            input(data-abide-ignore type='radio' name='roshambo2' value='papier' id='roshambo2Papier' required)
-            label(for='roshambo2Papier') Papier
-              br
-              img(src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Rock-paper-scissors_%28paper%29.png/240px-Rock-paper-scissors_%28paper%29.png' alt='Papier' title='Papier')
-
-          div(class="small-3 columns")
-            input(data-abide-ignore type='radio' name='roshambo2' value='ciseau' id='roshambo2Ciseau' required)
-            label(for='roshambo2Ciseau') Ciseau
-              br
-              img(src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Rock-paper-scissors_%28scissors%29.png/240px-Rock-paper-scissors_%28scissors%29.png' alt='Ciseau' title='Ciseau')
-
+          +hand(antispam.roshambo.fakes[0], true)
+          +hand(antispam.roshambo.fakes[1], true)
+          +hand(antispam.roshambo.fakes[2], true)
           div(class="small-3 columns")
             img(src='http://revealproject.eu/wp-content/uploads/Image-blog-on-automated-journalism-700x325.png')
 
@@ -113,27 +124,10 @@ block content
         p Dans le but de prévenir le <i>spam</i>, je vous propose une petite partie de Roche-Papier-Ciseau.
         p Pouvez-vous battre ma main? <i>J'ai déjà joué.</i>
         .row.roshambo
-          div(class="small-3 columns")
-            input(data-abide-ignore type='radio' name='roshambo' value='roche' id='roshamboRoche' required)
-            label(for='roshamboRoche') Roche
-              br
-              img(src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Rock-paper-scissors_%28rock%29.png/240px-Rock-paper-scissors_%28rock%29.png' alt='Roche' title='Roche')
-
-          div(class="small-3 columns")
-            input(data-abide-ignore type='radio' name='roshambo' value='papier' id='roshamboPapier' required)
-            label(for='roshamboPapier') Papier
-              br
-              img(src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Rock-paper-scissors_%28paper%29.png/240px-Rock-paper-scissors_%28paper%29.png' alt='Papier' title='Papier')
-
-          div(class="small-3 columns")
-            input(data-abide-ignore type='radio' name='roshambo' value='ciseau' id='roshamboCiseau' required)
-            label(for='roshamboCiseau') Ciseau
-              br
-              img(src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Rock-paper-scissors_%28scissors%29.png/240px-Rock-paper-scissors_%28scissors%29.png' alt='Ciseau' title='Ciseau')
-
-          div(class="small-3 columns")
-            img.flipped(src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Rock-paper-scissors_%28rock%29.png/240px-Rock-paper-scissors_%28rock%29.png' alt='Vous devez battre Roche' title='Vous devez battre Roche')
-            | Roche
+          +hand(antispam.roshambo.picks[0])
+          +hand(antispam.roshambo.picks[1])
+          +hand(antispam.roshambo.picks[2])
+          +toBeat
 
     br
     .row

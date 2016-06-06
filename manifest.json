@@ -17,7 +17,10 @@
     {
       "plugin": {
         "register": "./plugins/roshambo",
-        "options": { "password": "rahrahrahrahrahrahrahrahrahrahrahrahrahrahrahrahrahrah" }
+        "options": {
+          "password": "rahrahrahrahrahrahrahrahrahrahrahrahrahrahrahrahrahrah",
+          "isSecure": true
+        }
       }
     },
     {

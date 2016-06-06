@@ -4,6 +4,7 @@
 const bcrypt = require('bcrypt')
 const got = require('got')
 const human = require('human-format')
+const shuffle = require('lodash.shuffle')
 
 const saltRounds = 10
 
@@ -117,7 +118,21 @@ exports.register = require('../lib/utils').routePlugin(
       method: 'GET',
       path: '/register',
       handler: (request, reply) => {
-        const antispam = { roshambo: 5 }
+        let antispam
+
+        if (request.state.antispam && request.state.antispam.roshambo && request.state.antispam.roshambo.fakes) {
+          antispam = request.state.antispam
+        } else {
+          let picks = shuffle(['roche', 'papier', 'ciseaux'])
+          antispam = {
+            roshambo: {
+              toBeat: picks[0],
+              picks: shuffle(picks),
+              fakes: shuffle(picks)
+            }
+          }
+        }
+
         reply.view(request.auth && request.auth.isAuthenticated ? 'logged' : 'register', { antispam }).state('antispam', antispam)
       }
     },
@@ -125,12 +140,30 @@ exports.register = require('../lib/utils').routePlugin(
       method: 'POST',
       path: '/register',
       handler: function (request, reply) {
-        console.log('stateAS:', request.state.antispam)
         // missing/empty fields
         if (!request.payload.name || !request.payload.pw) { return reply.redirect('/register') }
 
         // passwords don't match
         if (request.payload.pw !== request.payload.pw2) { return reply.redirect('/register') }
+
+        // failed antispam
+        if (!request.payload.roshambo || request.payload.roshambo2 || request.payload.roshambo === request.state.antispam.roshambo.toBeat) {
+          return reply.redirect('/register')
+        }
+
+        switch (request.payload.roshambo) {
+          case 'roche':
+            if (request.state.antispam.roshambo.toBeat === 'papier') { return reply.redirect('/register') }
+            break
+
+          case 'papier':
+            if (request.state.antispam.roshambo.toBeat === 'ciseaux') { return reply.redirect('/register') }
+            break
+
+          case 'ciseaux':
+            if (request.state.antispam.roshambo.toBeat === 'roche') { return reply.redirect('/register') }
+            break
+        }
 
         const Users = request.collections.users
         Users.findOneByName(request.payload.name)
@@ -158,7 +191,7 @@ exports.register = require('../lib/utils').routePlugin(
                   Users.create(obj)
                     .then((u) => {
                       request.cookieAuth.set({ id: u.id, name: u.name })
-                      reply.redirect('/me')
+                      reply.redirect('/me').state('antispam', {})
                     })
                 })
               })
