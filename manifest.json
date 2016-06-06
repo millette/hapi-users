@@ -16,6 +16,12 @@
     { "plugin": "vision" },
     {
       "plugin": {
+        "register": "./plugins/roshambo",
+        "options": { "password": "rahrahrahrahrahrahrahrahrahrahrahrahrahrahrahrahrahrah" }
+      }
+    },
+    {
+      "plugin": {
         "register": "visionary",
         "options": {
           "engines": { "pug": "pug" },

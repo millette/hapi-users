@@ -104,7 +104,7 @@ exports.register = require('../lib/utils').routePlugin(
       path: '/users/{name}',
       handler: function (request, reply) {
         const Users = request.collections.users
-        Users.findOne({name: request.params.name})
+        Users.findOne({ name: request.params.name })
           .then((user) => {
             delete user.password
             delete user.email
@@ -116,12 +116,16 @@ exports.register = require('../lib/utils').routePlugin(
     {
       method: 'GET',
       path: '/register',
-      handler: (request, reply) => reply.view(request.auth && request.auth.isAuthenticated ? 'logged' : 'register')
+      handler: (request, reply) => {
+        const antispam = { roshambo: 5 }
+        reply.view(request.auth && request.auth.isAuthenticated ? 'logged' : 'register', { antispam }).state('antispam', antispam)
+      }
     },
     {
       method: 'POST',
       path: '/register',
       handler: function (request, reply) {
+        console.log('stateAS:', request.state.antispam)
         // missing/empty fields
         if (!request.payload.name || !request.payload.pw) { return reply.redirect('/register') }
 
