@@ -4,9 +4,7 @@
       "siteTitle": "Hapi Goo Loki",
       "vaultUrl": "https://btcart.com/now-vault/"
     },
-    "load": {
-      "sampleInterval": 1000
-    }
+    "load": { "sampleInterval": 1000 }
   },
   "connections": [{ "port": 3030 }],
   "registrations": [
@@ -37,11 +35,7 @@
       "plugin": {
         "register": "dogwater",
         "options": {
-          "connections": {
-            "main": {
-              "adapter": "memory"
-            }
-          },
+          "connections": { "main": { "adapter": "memory" } },
           "adapters": {
             "memory": "sails-memory",
             "disk": "sails-disk"
@@ -59,9 +53,7 @@
             "password": "cookie_encryption_password_secure",
             "isSecure": true
           },
-          "auth": {
-            "mode": "try"
-          }
+          "auth": { "mode": "try" }
         }
       }
     },

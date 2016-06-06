@@ -4,9 +4,7 @@
       "siteTitle": "Hapi Goo Loki",
       "vaultUrl": "https://btcart.com/now-vault/"
     },
-    "load": {
-      "sampleInterval": 1000
-    }
+    "load": { "sampleInterval": 1000 }
   },
   "connections": [{ "port": 3030 }],
   "registrations": [
@@ -57,9 +55,7 @@
             "password": "cookie_encryption_password_secure",
             "isSecure": false
           },
-          "auth": {
-            "mode": "try"
-          }
+          "auth": { "mode": "try" }
         }
       }
     },
