@@ -1,10 +1,14 @@
 'use strict'
 
 exports.register = (server, pluginOptions, next) => {
-  server.state('antispam', {
-    password: pluginOptions.password,
-    encoding: 'iron'
-  })
+  if (typeof pluginOptions !== 'object') {
+    pluginOptions = {
+      encoding: 'iron'
+    }
+  } else {
+    pluginOptions.encoding = 'iron'
+  }
+  server.state('antispam', pluginOptions)
 
   next()
 }
