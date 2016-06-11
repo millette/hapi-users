@@ -4,6 +4,8 @@
 
 const PouchDB = require('pouchdb-core')
   .plugin(require('pouchdb-adapter-memory'))
+  .plugin(require('pouchdb-adapter-http'))
+  .plugin(require('pouchdb-replication'))
   .plugin(require('pouchdb-find'))
 
 /**
@@ -96,7 +98,12 @@ module.exports = (function () {
 
       // console.log('CONNECTION111:', connection, connection.identity)
 
-      connections[connection.identity] = new PouchDB(connection.identity)
+      const db = new PouchDB(connection.identity)
+      db.sync('http://localhost:5984/hap', {
+        live: true,
+        retry: true
+      })
+      connections[connection.identity] = db
       cb();
     },
 
