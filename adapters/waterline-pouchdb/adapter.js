@@ -184,10 +184,34 @@ module.exports = (function () {
     find: function (connection, collection, options, cb) {
       console.log('FINDING', options)
       // console.log('CONNECTION222:', connection, options)
-      return connections[connection].get(options.where.id)
+      // return connections[connection].get(options.where.id)
+      const q = {
+        selector: options.where
+      }
+
+      if (q.selector.id) {
+        q.selector._id = q.selector.id
+        delete q.selector.id
+      }
+      // q.selector[options.where]
+      /*{
+        selector: {
+          _id: options.where.id
+        }
+      }*/
+      return connections[connection].find(q)
+        .then((x) => x.docs)
         .then((x) => {
           console.log('FOUND:', x)
-          cb(null, [x])
+          if (x.length) {
+            if (x.length === 1) {
+              cb(null, x[0])
+            } else {
+              cb(null, x)
+            }
+          } else {
+            cb(true)
+          }
         })
         .catch((err) => {
           console.log('ERROR', err)

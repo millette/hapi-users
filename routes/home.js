@@ -239,16 +239,19 @@ exports.register = require('../lib/utils').routePlugin(
       path: '/login',
       handler: function (request, reply) {
         const Users = request.collections.users
+        /*
         Users.find({ or: [
           { name: request.payload.name },
           { email: request.payload.name }
         ]})
+        */
+        Users.find({ name: request.payload.name })
           .then((x) => {
             if (x.length === 1 && request.payload.pw) {
               bcrypt.compare(request.payload.pw, x[0].password, function (err, valid) {
                 if (err) { console.error('ERROR:', err) }
                 if (valid) {
-                  request.cookieAuth.set({ id: x[0].id, name: x[0].name })
+                  request.cookieAuth.set({ id: x[0]._id, name: x[0].name })
                   reply.redirect('/me')
                 } else {
                   reply.redirect('/login')
