@@ -116,6 +116,21 @@ exports.register = require('../lib/utils').routePlugin(
     },
     {
       method: 'GET',
+      path: '/userid/{id}',
+      handler: function (request, reply) {
+        const Users = request.collections.users
+        Users.findOne(request.params.id)
+          .then((user) => {
+            console.log('USER:', user)
+            delete user.password
+            delete user.email
+            delete user.id
+            reply.view('public-profile', { user })
+          })
+      }
+    },
+    {
+      method: 'GET',
       path: '/register',
       handler: (request, reply) => {
         let antispam
@@ -175,6 +190,7 @@ exports.register = require('../lib/utils').routePlugin(
         console.log('ok9')
 
         const Users = request.collections.users
+/*
         Users.findOneByName(request.payload.name)
           .then((z) => {
             // name already exists
@@ -184,7 +200,7 @@ exports.register = require('../lib/utils').routePlugin(
               .then((z) => {
                 // email already exists
                 if (z) { return reply.redirect('/register') }
-
+*/
                 bcrypt.hash(request.payload.pw, saltRounds, function (err, hash) {
                   if (err) {
                     console.error('ERROR:', err)
@@ -199,12 +215,15 @@ exports.register = require('../lib/utils').routePlugin(
 
                   Users.create(obj)
                     .then((u) => {
+                      console.log('UUU:', u)
                       request.cookieAuth.set({ id: u.id, name: u.name })
                       reply.redirect('/me').state('antispam', {})
                     })
                 })
+/*
               })
           })
+*/
       }
     },
     {

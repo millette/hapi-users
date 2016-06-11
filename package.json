@@ -5,6 +5,7 @@
   "repository": "millette/hapi-users",
   "scripts": {
     "lint": "standard",
+    "dev": "rejoice -c manifest-pouchdb.json -p $(pwd)",
     "start": "standard && rejoice -c manifest-disk.json -p $(pwd)",
     "now-start": "./node_modules/.bin/rejoice -c manifest.json -p $(pwd)",
     "test": "standard && nyc ava",
@@ -42,6 +43,9 @@
     "hapi-context-credentials": "^2.0.0",
     "human-format": "^0.6.0",
     "lodash.shuffle": "^4.0.0",
+    "pouchdb-adapter-memory": "^5.4.1",
+    "pouchdb-core": "^5.4.1",
+    "pouchdb-find": "^0.10.0",
     "pug": "^2.0.0-beta2",
     "rejoice": "^3.2.0",
     "sails-disk": "^0.10.9",

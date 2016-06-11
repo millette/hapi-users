@@ -5,13 +5,18 @@ exports.register = (server, pluginOptions, next) => {
 
   const validate = (request, session, callback) => {
     const Users = request.collections.users
+    console.log('session:', session)
     Users.findOne(session.id)
       .then((x) => {
+        console.log('x:', x)
         if (x) {
           callback(null, true)
         } else {
           callback(null, false, {})
         }
+      })
+      .catch((e) => {
+        callback(e, false, {})
       })
   }
 

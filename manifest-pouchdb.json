@@ -1,0 +1,85 @@
+{
+  "server": {
+    "app": {
+      "siteTitle": "Hapi Goo Loki",
+      "vaultUrl": "https://btcart.com/now-vault/"
+    },
+    "load": { "sampleInterval": 1000 }
+  },
+  "connections": [{ "port": 3030 }],
+  "registrations": [
+    { "plugin": "hapi-context-app" },
+    { "plugin": "hapi-context-credentials" },
+    { "plugin": "bedwetter" },
+    { "plugin": "vision" },
+    {
+      "plugin": {
+        "register": "./plugins/roshambo",
+        "options": { "password": "rahrahrahrahrahrahrahrahrahrahrahrahrahrahrahrahrahrah" }
+      }
+    },
+    {
+      "plugin": {
+        "register": "visionary",
+        "options": {
+          "engines": { "pug": "pug" },
+          "path": "views",
+          "isCached": false
+        }
+      }
+    },
+    {
+      "plugin": {
+        "register": "dogwater",
+        "options": {
+          "connections": {
+            "main": {
+              "adapter": "pouchdb"
+            }
+          },
+          "adapters": {
+            "memory": "sails-memory",
+            "disk": "sails-disk",
+            "pouchdb": "/home/millette/hap/hapi-users/adapters/waterline-pouchdb/adapter.js"
+          },
+          "models": "lib/models"
+        }
+      }
+    },
+    { "plugin": "hapi-auth-cookie" },
+    {
+      "plugin": {
+        "register": "./plugins/login",
+        "options": {
+          "strategy": {
+            "password": "cookie_encryption_password_secure",
+            "isSecure": false
+          },
+          "auth": { "mode": "try" }
+        }
+      }
+    },
+    { "plugin": "./routes/home" },
+    {
+      "plugin": {
+        "register": "good",
+        "options": {
+          "reporters": {
+            "console": [
+              {
+                "module": "good-squeeze",
+                "name": "Squeeze",
+                "args": [{
+                  "response": "*",
+                  "log": "*"
+                }]
+              },
+              { "module": "good-console" },
+              "stdout"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
