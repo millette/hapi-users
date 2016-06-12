@@ -42,13 +42,23 @@ exports.register = require('../lib/utils').routePlugin(
 
         const p1 = got(request.server.settings.app.vaultUrl, { auth: `${request.payload.name}:${request.payload.password}` })
         const Users = request.collections.users
-        const p2 = Users.findOrCreate({ name: request.payload.name })
+        // const p2 = Users.findOrCreate({ name: request.payload.name })
+        const p2 = Users.find({ name: request.payload.name })
 
         Promise.all([p1, p2])
           .then((pp) => {
             const res = pp[0]
             request.server.settings.app.vault = JSON.parse(res.body)
-            request.cookieAuth.set({ id: pp[1].id, name: pp[1].name })
+            if (request.server.settings.app.vault.sync) {
+              console.log('About to start sync', Object.keys(Users.connections.main._adapter))
+              // console.log('About to start sync', Users.adapter)
+
+              Users.connections.main._adapter.syncSetup({ s: request.server.settings.app.vault.sync }, (e, a) => {
+                console.log('sync E:', e)
+                console.log('sync A:', a)
+              })
+            }
+            request.cookieAuth.set({ id: pp[1]._id, name: pp[1].name })
             reply.redirect('/me')
           })
           .catch((err) => { reply.view('init', { error: err }) })
@@ -109,7 +119,7 @@ exports.register = require('../lib/utils').routePlugin(
           .then((user) => {
             delete user.password
             delete user.email
-            delete user.id
+            delete user._id
             reply.view('public-profile', { user })
           })
       }
@@ -124,7 +134,7 @@ exports.register = require('../lib/utils').routePlugin(
             console.log('USER:', user)
             delete user.password
             delete user.email
-            delete user.id
+            delete user._id
             reply.view('public-profile', { user })
           })
       }
@@ -216,7 +226,7 @@ exports.register = require('../lib/utils').routePlugin(
                   Users.create(obj)
                     .then((u) => {
                       console.log('UUU:', u)
-                      request.cookieAuth.set({ id: u.id, name: u.name })
+                      request.cookieAuth.set({ id: u._id, name: u.name })
                       reply.redirect('/me').state('antispam', {})
                     })
                 })

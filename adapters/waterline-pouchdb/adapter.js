@@ -20,16 +20,12 @@ const PouchDB = require('pouchdb-core')
  * For many adapters, this file is all you need.  For very complex adapters, you may need more flexiblity.
  * In any case, it's probably a good idea to start with one file and refactor only if necessary.
  * If you do go that route, it's conventional in Node to create a `./lib` directory for your private submodules
- * and load them at the top of the file with other dependencies.  e.g. var update = `require('./lib/update')`;
+ * and load them at the top of the file with other dependencies.  e.g. var update = `require('./lib/update')`
  */
 module.exports = (function () {
-
-
   // You'll want to maintain a reference to each connection
   // that gets registered with this adapter.
-  var connections = {};
-
-
+  var connections = {}
 
   // You may also want to store additional, private data
   // per-connection (esp. if your data store uses persistent
@@ -79,8 +75,6 @@ module.exports = (function () {
       // customThings: ['eh']
     },
 
-
-
     /**
      *
      * This method runs when a model is initially registered
@@ -91,22 +85,23 @@ module.exports = (function () {
      * @param  {Function} cb         [description]
      * @return {[type]}              [description]
      */
-    registerConnection: function(connection, collections, cb) {
-
-      if(!connection.identity) return cb(new Error('Connection is missing an identity.'));
-      if(connections[connection.identity]) return cb(new Error('Connection is already registered.'));
+    registerConnection: function (connection, collections, cb) {
+      if (!connection.identity) return cb(new Error('Connection is missing an identity.'))
+      if (connections[connection.identity]) return cb(new Error('Connection is already registered.'))
 
       // console.log('CONNECTION111:', connection, connection.identity)
 
+      /*
       const db = new PouchDB(connection.identity)
       db.sync('http://localhost:5984/hap', {
         live: true,
         retry: true
       })
       connections[connection.identity] = db
-      cb();
+      */
+      connections[connection.identity] = new PouchDB(connection.identity)
+      cb()
     },
-
 
     /**
      * Fired when a model is unregistered, typically when the server
@@ -121,17 +116,17 @@ module.exports = (function () {
       // console.log('CONNECTION666-conn-A:', conn)
       // console.log('CONNECTION666-cb:', cb)
 
-      if (typeof conn == 'function') {
-        cb = conn;
-        conn = null;
+      if (typeof conn === 'function') {
+        cb = conn
+        conn = null
       }
       // console.log('CONNECTION666-conn-B:', conn)
       if (!conn) {
-        connections = {};
-        return cb();
+        connections = {}
+        return cb()
       }
       // console.log('CONNECTION666-conn-C:', conn)
-      if(!connections[conn.identity]) return cb();
+      if (!connections[conn.identity]) return cb()
       const db = connections[conn]
       db.destroy()
         .then(() => {
@@ -148,7 +143,7 @@ module.exports = (function () {
     // Return attributes
     describe: function (connection, collection, cb) {
       // Add in logic here to describe a collection (e.g. DESCRIBE TABLE logic)
-      return cb();
+      return cb()
     },
     */
 
@@ -161,7 +156,7 @@ module.exports = (function () {
     /*
     define: function (connection, collection, definition, cb) {
       // Add in logic here to create a collection (e.g. CREATE TABLE logic)
-      return cb();
+      return cb()
     },
     */
 
@@ -174,7 +169,7 @@ module.exports = (function () {
     /*
     drop: function (connection, collection, relations, cb) {
       // Add in logic here to delete a collection (e.g. DROP TABLE logic)
-      return cb();
+      return cb()
     },
     */
 
@@ -201,11 +196,11 @@ module.exports = (function () {
         delete q.selector.id
       }
       // q.selector[options.where]
-      /*{
+      /* {
         selector: {
           _id: options.where.id
         }
-      }*/
+      } */
       return connections[connection].find(q)
         .then((x) => x.docs)
         .then((x) => {
@@ -263,23 +258,37 @@ module.exports = (function () {
       return connections[connection].remove(options.id, options._rev)
         .then((x) => cb(null, x))
         .catch((err) => cb(err))
+    },
+
+    // syncSetup: function (connection, collection, options, cb) {
+    syncSetup: function (options, cb) {
+      console.log('SYNC')
+      /*
+      console.log('connection:', connection)
+      console.log('collection:', collection)
+      console.log('options:', options)
+      console.log('cb:', cb)
+      */
+      connections.main.sync(options.s)
+      if (typeof cb === 'function') {
+        return cb(null, 'now syncing')
+      }
     }
 
     /*
-
     // Custom methods defined here will be available on all models
     // which are hooked up to this adapter:
     //
     // e.g.:
     //
     foo: function (connection, collection, options, cb) {
-      return cb(null,"ok");
+      return cb(null,'ok')
     },
     bar: function (connection, collection, options, cb) {
-      if (!options.jello) return cb("Failure!");
-      else return cb();
+      if (!options.jello) return cb('Failure!')
+      else return cb()
       destroy: function (connection, collection, options, values, cb) {
-       return cb();
+       return cb()
      }
 
     // So if you have three models:
@@ -292,40 +301,28 @@ module.exports = (function () {
     // Sparrow.foo(...)
     // Sparrow.bar(...)
 
-
     // Example success usage:
     //
     // (notice how the first argument goes away:)
     Tiger.foo({}, function (err, result) {
-      if (err) return console.error(err);
-      else console.log(result);
+      if (err) return console.error(err)
+      else console.log(result)
 
       // outputs: ok
-    });
+    })
 
     // Example error usage:
     //
     // (notice how the first argument goes away:)
     Sparrow.bar({test: 'yes'}, function (err, result){
-      if (err) console.error(err);
-      else console.log(result);
+      if (err) console.error(err)
+      else console.log(result)
 
       // outputs: Failure!
     })
-
-
-
-
     */
-
-
-
-
-  };
-
+  }
 
   // Expose adapter definition
-  return adapter;
-
-})();
-
+  return adapter
+})()
