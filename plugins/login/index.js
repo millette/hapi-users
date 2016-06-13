@@ -6,7 +6,7 @@ exports.register = (server, pluginOptions, next) => {
   const validate = (request, session, callback) => {
     const Users = request.collections.users
     console.log('session:', session)
-    Users.findOne(session.id)
+    Users.findOne({ _id: session.id })
       .then((x) => {
         console.log('x:', x)
         if (x) {

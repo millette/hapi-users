@@ -79,7 +79,7 @@ exports.register = require('../lib/utils').routePlugin(
         auth: { mode: 'required' },
         handler: function (request, reply) {
           const Users = request.collections.users
-          Users.findOne(request.auth.credentials.id)
+          Users.findOne({ _id: request.auth.credentials.id })
             .then((user) => {
               if (user.password) {
                 delete user.password
@@ -119,7 +119,7 @@ exports.register = require('../lib/utils').routePlugin(
           .then((user) => {
             delete user.password
             delete user.email
-            delete user._id
+            // delete user.id
             reply.view('public-profile', { user })
           })
       }
@@ -129,12 +129,12 @@ exports.register = require('../lib/utils').routePlugin(
       path: '/userid/{id}',
       handler: function (request, reply) {
         const Users = request.collections.users
-        Users.findOne(request.params.id)
+        Users.findOne({ _id: request.params.id })
           .then((user) => {
             console.log('USER:', user)
             delete user.password
             delete user.email
-            delete user._id
+            // delete user.id
             reply.view('public-profile', { user })
           })
       }
@@ -200,7 +200,6 @@ exports.register = require('../lib/utils').routePlugin(
         console.log('ok9')
 
         const Users = request.collections.users
-/*
         Users.findOneByName(request.payload.name)
           .then((z) => {
             // name already exists
@@ -210,7 +209,6 @@ exports.register = require('../lib/utils').routePlugin(
               .then((z) => {
                 // email already exists
                 if (z) { return reply.redirect('/register') }
-*/
                 bcrypt.hash(request.payload.pw, saltRounds, function (err, hash) {
                   if (err) {
                     console.error('ERROR:', err)
@@ -230,10 +228,8 @@ exports.register = require('../lib/utils').routePlugin(
                       reply.redirect('/me').state('antispam', {})
                     })
                 })
-/*
               })
           })
-*/
       }
     },
     {
@@ -297,7 +293,7 @@ exports.register = require('../lib/utils').routePlugin(
       path: '/api/by/email/users/{email}',
       handler: {
         bedwetter: {
-          omit: ['password', 'name', 'id', 'createdAt', 'updatedAt'],
+          omit: ['password', 'name', '_id', 'id', 'createdAt', 'updatedAt'],
           prefix: '/api/by/email',
           pkAttr: 'email'
         }
@@ -308,7 +304,7 @@ exports.register = require('../lib/utils').routePlugin(
       path: '/api/by/name/users/{name}',
       handler: {
         bedwetter: {
-          omit: ['password', 'email', 'id', 'createdAt', 'updatedAt'],
+          omit: ['password', 'email', '_id', 'id', 'createdAt', 'updatedAt'],
           prefix: '/api/by/name',
           pkAttr: 'name'
         }

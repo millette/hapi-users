@@ -191,10 +191,13 @@ module.exports = (function () {
         selector: options.where
       }
 
+      /*
       if (q.selector.id) {
         q.selector._id = q.selector.id
         delete q.selector.id
       }
+      */
+
       // q.selector[options.where]
       /* {
         selector: {
@@ -205,6 +208,8 @@ module.exports = (function () {
         .then((x) => x.docs)
         .then((x) => {
           console.log('FOUND:', x)
+          cb(null, x)
+          /*
           if (x.length) {
             if (x.length === 1) {
               cb(null, x[0])
@@ -214,6 +219,7 @@ module.exports = (function () {
           } else {
             cb(true)
           }
+          */
         })
         .catch((err) => {
           console.log('ERROR', err)
@@ -236,7 +242,7 @@ module.exports = (function () {
       return connections[connection].post(values)
         .then((x) => {
           // console.log('MADE', x)
-          values.id = x.id
+          values._id = x.id
           values._rev = x.rev
           cb(null, values)
         })
