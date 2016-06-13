@@ -265,68 +265,10 @@ module.exports = (function () {
         .then((x) => cb(null, x))
         .catch((err) => cb(err))
     },
-
-    // syncSetup: function (connection, collection, options, cb) {
-    syncSetup: function (options, cb) {
-      console.log('SYNC')
-      /*
-      console.log('connection:', connection)
-      console.log('collection:', collection)
-      console.log('options:', options)
-      console.log('cb:', cb)
-      */
-      connections.main.sync(options.s)
-      if (typeof cb === 'function') {
-        return cb(null, 'now syncing')
-      }
-    }
-
-    /*
-    // Custom methods defined here will be available on all models
-    // which are hooked up to this adapter:
-    //
-    // e.g.:
-    //
-    foo: function (connection, collection, options, cb) {
-      return cb(null,'ok')
+    syncSetup: function (connection, collection, options, cb) {
+      connections[connection].sync(options)
+      return cb(null, 'now syncing')
     },
-    bar: function (connection, collection, options, cb) {
-      if (!options.jello) return cb('Failure!')
-      else return cb()
-      destroy: function (connection, collection, options, values, cb) {
-       return cb()
-     }
-
-    // So if you have three models:
-    // Tiger, Sparrow, and User
-    // 2 of which (Tiger and Sparrow) implement this custom adapter,
-    // then you'll be able to access:
-    //
-    // Tiger.foo(...)
-    // Tiger.bar(...)
-    // Sparrow.foo(...)
-    // Sparrow.bar(...)
-
-    // Example success usage:
-    //
-    // (notice how the first argument goes away:)
-    Tiger.foo({}, function (err, result) {
-      if (err) return console.error(err)
-      else console.log(result)
-
-      // outputs: ok
-    })
-
-    // Example error usage:
-    //
-    // (notice how the first argument goes away:)
-    Sparrow.bar({test: 'yes'}, function (err, result){
-      if (err) console.error(err)
-      else console.log(result)
-
-      // outputs: Failure!
-    })
-    */
   }
 
   // Expose adapter definition
