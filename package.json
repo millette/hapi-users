@@ -44,16 +44,12 @@
     "hapi-context-credentials": "^2.0.0",
     "human-format": "^0.6.0",
     "lodash.shuffle": "^4.0.0",
-    "pouchdb-adapter-http": "^5.4.2",
-    "pouchdb-adapter-memory": "^5.4.2",
-    "pouchdb-core": "^5.4.2",
-    "pouchdb-find": "^0.10.0",
-    "pouchdb-replication": "^5.4.2",
     "pug": "^2.0.0-beta3",
     "rejoice": "^3.2.0",
     "sails-disk": "^0.10.10",
     "sails-memory": "^0.10.7",
     "vision": "^4.1.0",
-    "visionary": "^6.0.0"
+    "visionary": "^6.0.0",
+    "waterline-pouchdb": "^0.1.0"
   }
 }

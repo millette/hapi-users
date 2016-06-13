@@ -40,7 +40,7 @@
           "adapters": {
             "memory": "sails-memory",
             "disk": "sails-disk",
-            "pouchdb": "/home/millette/hap/hapi-users/adapters/waterline-pouchdb/adapter.js"
+            "pouchdb": "waterline-pouchdb"
           },
           "models": "lib/models"
         }
