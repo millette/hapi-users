@@ -2,11 +2,13 @@
 
 // npm
 const bcrypt = require('bcrypt')
-const got = require('got')
 const human = require('human-format')
 const shuffle = require('lodash.shuffle')
+// const got = require('got')
 
 const saltRounds = 10
+
+// let secrets
 
 exports.register = require('../lib/utils').routePlugin(
   {
@@ -20,6 +22,7 @@ exports.register = require('../lib/utils').routePlugin(
       path: '/',
       handler: { view: { template: 'home' } }
     },
+    /*
     {
       method: 'GET',
       path: '/init',
@@ -31,6 +34,8 @@ exports.register = require('../lib/utils').routePlugin(
         }
       }
     },
+    */
+    /*
     {
       method: 'POST',
       path: '/init',
@@ -70,6 +75,7 @@ exports.register = require('../lib/utils').routePlugin(
         }
       }
     },
+    */
     {
       method: 'GET',
       path: '/load',

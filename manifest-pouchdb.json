@@ -60,6 +60,7 @@
       }
     },
     { "plugin": "./routes/home" },
+    { "plugin": "./plugins/vault" },
     {
       "plugin": {
         "register": "good",
