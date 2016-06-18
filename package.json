@@ -45,6 +45,6 @@
     "sails-memory": "^0.10.7",
     "vision": "^4.1.0",
     "visionary": "^6.0.0",
-    "waterline-pouchdb": "^0.1.1"
+    "waterline-pouchdb": "^0.1.2"
   }
 }
