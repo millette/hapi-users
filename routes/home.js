@@ -134,6 +134,9 @@ exports.register = require('../lib/utils').routePlugin(
             // delete user.id
             reply.view('public-profile', { user })
           })
+          .catch((e) => {
+            reply(`The user "${request.params.name}" was not found`).code(404)
+          })
       }
     },
     {
@@ -148,6 +151,9 @@ exports.register = require('../lib/utils').routePlugin(
             delete user.email
             // delete user.id
             reply.view('public-profile', { user })
+          })
+          .catch((e) => {
+            reply(`The user with ID "${request.params.id}" was not found`).code(404)
           })
       }
     },
