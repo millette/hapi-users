@@ -4,11 +4,8 @@
 const bcrypt = require('bcrypt')
 const human = require('human-format')
 const shuffle = require('lodash.shuffle')
-// const got = require('got')
 
 const saltRounds = 10
-
-// let secrets
 
 exports.register = require('../lib/utils').routePlugin(
   {
@@ -22,60 +19,6 @@ exports.register = require('../lib/utils').routePlugin(
       path: '/',
       handler: { view: { template: 'home' } }
     },
-    /*
-    {
-      method: 'GET',
-      path: '/init',
-      config: {
-        auth: { mode: 'required' },
-        handler: function (request, reply) {
-          if (request.server.settings.app.vault) { return reply.redirect('/') }
-          reply.view('init')
-        }
-      }
-    },
-    */
-    /*
-    {
-      method: 'POST',
-      path: '/init',
-      config: {
-        auth: { mode: 'required' },
-        handler: function (request, reply) {
-          if (request.server.settings.app.vault) { return reply.redirect('/') }
-          if (!request.payload || !request.payload.name || !request.payload.password) {
-            return reply.view('init', { error: 'Username and password required.' })
-          }
-
-          const p1 = got(request.server.settings.app.vaultUrl, { auth: `${request.payload.name}:${request.payload.password}` })
-          const Users = request.collections.users
-          // const p2 = Users.findOrCreate({ name: request.payload.name })
-          const p2 = Users.find({ name: request.payload.name })
-
-          Promise.all([p1, p2])
-            .then((pp) => {
-              const res = pp[0]
-              request.server.settings.app.vault = JSON.parse(res.body)
-              if (request.server.settings.app.vault.sync) {
-                console.log('About to start sync', Object.keys(Users.connections.main._adapter))
-                // console.log('About to start sync', Users.adapter)
-                return Users.syncSetup(request.server.settings.app.vault.sync, (e, a) => {
-                  console.log('sync E:', e)
-                  console.log('sync A:', a)
-                  console.log('AA-pp[1]:', pp[1])
-                  // request.cookieAuth.set({ id: pp[1]._id, name: pp[1].name })
-                  reply.redirect('/me')
-                })
-              }
-              console.log('BB-pp[1]:', pp[1])
-              // request.cookieAuth.set({ id: pp[1]._id, name: pp[1].name })
-              reply.redirect('/me')
-            })
-            .catch((err) => { reply.view('init', { error: err }) })
-        }
-      }
-    },
-    */
     {
       method: 'GET',
       path: '/load',
